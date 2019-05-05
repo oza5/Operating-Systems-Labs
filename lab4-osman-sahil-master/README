@@ -1,0 +1,72 @@
+Name: Osman Ali
+Email: oza5@psu.edu
+Name: Sahil Bhanderi
+Email: skb5400@psu.edu
+
+Concurrency Mechanisms:
+In this section, explain what concurrency mechanisms you used in your project.
+
+* We used pthread_mutex locks to implement locks on our critical sections of the code,
+the lock could only be acquired by a thread with the specific id,  and only that thread 
+could unlock it while the data was being copied over from producer buffers to consumer 
+buffers.This allowed for us to avoid race conditions in our code
+
+Producer-Consumer Problem:
+In this section, explain how you addressed the producer-consumer problem in
+implementing the buffer, `my_produce`, and `mr_consume`.
+* Our buffer was of type char it was basically segmented to threads with each a buffer of their own
+that was equal the size, moreover this was dealt with as a list that could be iterated through using unique id's.
+
+*mr-produce:it was basically where we created temporary nodes to store the current key-value pairs which were then 
+copied to the consumer using memcopy, this critical section was locked by each thread in order to avoid any data race 
+conditions. once a thread was done we iterated to the next.
+
+*mr-consume:waits for each of the buffer mappers to get done once that is done the key value pairs are memmoved to the
+reducer buffer which is one big buffer collecting all the data of the threads.once it is finished it returns normally.
+once again the sorting section is locked using mutex. 
+
+Known Bugs:
+In this section, list any known bugs with your implementation, if any.
+*deadlock when doing performance evaluation
+
+Comments:
+Any other comments you have regarding your project.
+
+Statistics (Use microseconds):
+@Test: 0, perf-eval.txt, 1, 100, <min>
+@Test: 1, perf-eval.txt, 2, 100, <min>
+@Test: 2, perf-eval.txt, 4, 100, <min>
+@Test: 3, perf-eval.txt, 8, 100, <min>
+@Test: 4, perf-eval.txt, 16, 100, <min>
+@Test: 5, perf-eval.txt, 32, 100, <min>
+@Test: 6, perf-eval.txt, 64, 100, <min>
+@Test: 7, perf-eval.txt, 1, 1000, <min>
+@Test: 8, perf-eval.txt, 2, 1000, <min>
+@Test: 9, perf-eval.txt, 4, 1000, <min>
+@Test: 10, perf-eval.txt, 8, 1000, <min>
+@Test: 11, perf-eval.txt, 16, 1000, <min>
+@Test: 12, perf-eval.txt, 32, 1000, <min>
+@Test: 13, perf-eval.txt, 64, 1000, <min>
+@Test: 14, perf-eval.txt, 1, 10000, <min>
+@Test: 15, perf-eval.txt, 2, 10000, <min>
+@Test: 16, perf-eval.txt, 4, 10000, <min>
+@Test: 17, perf-eval.txt, 8, 10000, <min>
+@Test: 18, perf-eval.txt, 16, 10000, <min>
+@Test: 19, perf-eval.txt, 32, 10000, <min>
+@Test: 20, perf-eval.txt, 64, 10000, <min>
+
+Performance Evaluation:
+In this section, briefly discuss the results above, and how they
+support or contradict your intuitions/expectations.
+My performance evaluation could not work due to a deadlock which we could not debug, however from what we speculated we 
+expected the performance to be a 'U shaped' curve as with increasing number of threads as more threads means more amound of data
+can be computed in  parallel. However it flatlines with the buffer increasing in size but threads being comparitivwly small
+then we once again see the curve going up again as the number of threads increases exponentially speeding up the program.
+
+
+Sources Consulted:
+List any sources consulted.
+*https://stackoverflow.com/questions/39381237/initialize-malloc-in-zeros
+http://man7.org/linux/man-pages/man3/fopen.3.html
+https://linux.die.net/man/3/open
+http://www.cs.loyola.edu/~jglenn/702/S2008/Projects/P3/time.html
