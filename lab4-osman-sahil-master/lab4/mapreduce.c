@@ -129,7 +129,7 @@ void mr_destroy(struct map_reduce *mr) {
 /**/
 int mr_start(struct map_reduce *mr, const char *inpath, const char *outpath) {
 	
-	gettimeofday(&start, NULL);/*Start taking the time for performance evaluation0*/
+	gettimeofday(&start, NULL);/*Start taking the time for performance evaluation*/
 	
 	mr->red_args->mr = mr;/*sets mr to reducer*/
 	mr->red_args->outfd = open(outpath,O_WRONLY | O_CREAT | O_TRUNC,S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH); /*give read, write truncate permission to for reducer*/
